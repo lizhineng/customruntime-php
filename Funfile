@@ -1,0 +1,16 @@
+RUNTIME custom
+RUN apt-get update
+RUN apt-get -y install apt-transport-https lsb-release ca-certificates wget
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+RUN sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+RUN apt-get update
+RUN fun-install apt-get install nginx
+RUN fun-install apt-get install php7.4-fpm
+RUN fun-install apt-get install php7.4-mysql
+RUN fun-install apt-get install php7.4-bcmath
+RUN fun-install apt-get install php7.4-ctype
+RUN fun-install apt-get install php7.4-json
+RUN fun-install apt-get install php7.4-mbstring
+RUN fun-install apt-get install php7.4-openssl
+RUN fun-install apt-get install php7.4-tokenizer
+RUN fun-install apt-get install php7.4-xml
