@@ -363,7 +363,7 @@ zend.enable_gc = On
 
 ; Allows to include or exclude arguments from stack traces generated for exceptions
 ; Default: Off
-; In production, it is recommended to turn this setting on to prohibit the output 
+; In production, it is recommended to turn this setting on to prohibit the output
 ; of sensitive information in stack traces
 zend.exception_ignore_args = On
 
@@ -756,7 +756,7 @@ user_dir =
 
 ; Directory in which the loadable extensions (modules) reside.
 ; http://php.net/extension-dir
-;extension_dir = "./"
+extension_dir = "/code/.fun/root/usr/lib/php/20190902"
 ; On windows:
 ;extension_dir = "ext"
 
@@ -910,30 +910,29 @@ default_socket_timeout = 60
 ;   extension folders as well as the separate PECL DLL download (PHP 5+).
 ;   Be sure to appropriately set the extension_dir directive.
 ;
-;extension=bz2
-;extension=curl
-;extension=ffi
-;extension=fileinfo
-;extension=gd2
-;extension=gettext
-;extension=gmp
-;extension=intl
-;extension=imap
-;extension=ldap
-;extension=mbstring
-;extension=exif      ; Must be after mbstring as it depends on it
-;extension=mysqli
-;extension=oci8_12c  ; Use with Oracle Database 12c Instant Client
-;extension=odbc
-;extension=openssl
-;extension=pdo_firebird
-;extension=pdo_mysql
-;extension=pdo_oci
-;extension=pdo_odbc
-;extension=pdo_pgsql
-;extension=pdo_sqlite
-;extension=pgsql
-;extension=shmop
+extension=mysqlnd
+extension=mysqli
+extension=pdo
+extension=pdo_mysql
+extension=bcmath
+extension=ctype
+extension=json
+extension=mbstring
+extension=openssl
+extension=tokenizer
+extension=xml
+extension=xmlreader
+extension=xmlwriter
+extension=exif
+extension=fileinfo
+extension=readline
+extension=curl
+extension=iconv
+extension=gettext
+extension=zip
+extension=gd
+extension=intl
+zend_extension=opcache
 
 ; The MIBS data available in the PHP distribution must be installed.
 ; See http://www.php.net/manual/en/snmp.installation.php
@@ -1338,7 +1337,7 @@ session.save_handler = files
 ; where MODE is the octal representation of the mode. Note that this
 ; does not overwrite the process's umask.
 ; http://php.net/session.save-path
-;session.save_path = "/var/lib/php/sessions"
+session.save_path = "/mnt/auto/www/var/sessions"
 
 ; Whether to use strict session mode.
 ; Strict session mode does not accept an uninitialized session ID, and

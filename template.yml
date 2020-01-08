@@ -5,6 +5,10 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: 'Custom Runtime for PHP'
+      NasConfig:
+        Auto: true
+        UserId: 33
+        GroupId: 33
     php74:
       Type: 'Aliyun::Serverless::Function'
       Properties:

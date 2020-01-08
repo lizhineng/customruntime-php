@@ -14,3 +14,6 @@ RUN fun-install apt-get install php7.4-mbstring
 RUN fun-install apt-get install php7.4-openssl
 RUN fun-install apt-get install php7.4-tokenizer
 RUN fun-install apt-get install php7.4-xml
+RUN fun-install apt-get install php7.4-curl
+RUN fun-install apt-get install php7.4-gd
+RUN fun-install apt-get install php7.4-intl
