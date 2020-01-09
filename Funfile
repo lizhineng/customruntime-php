@@ -16,4 +16,83 @@ RUN fun-install apt-get install php7.4-tokenizer
 RUN fun-install apt-get install php7.4-xml
 RUN fun-install apt-get install php7.4-curl
 RUN fun-install apt-get install php7.4-gd
+RUN fun-install apt-get install php7.4-soap
 RUN fun-install apt-get install php7.4-intl
+RUN fun-install apt-get install php7.4-zip
+RUN fun-install apt-get install php7.4-readline
+
+# Setup Nginx
+
+RUN sed -i "s|pid /run/nginx.pid;|pid /tmp/.journey/nginx.pid;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|include /etc/nginx/modules-enabled/\*.conf;|include /code/.fun/root/etc/nginx/modules-enabled/*.conf;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|include /etc/nginx/conf.d/\*.conf;|include /code/.fun/root/etc/nginx/conf.d/*.conf;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|include /etc/nginx/sites-enabled/\*;|include /code/.fun/root/etc/nginx/sites-enabled/*;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|include /etc/nginx/mime.types;|include /code/.fun/root/etc/nginx/mime.types;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|access_log /var/log/nginx/access.log;|access_log off;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "s|error_log /var/log/nginx/error.log;|#error_log /var/log/nginx/error.log;|" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "1s|^|error_log /dev/null;\n|" /code/.fun/root/etc/nginx/nginx.conf
+
+RUN sed -i "/^http {/a proxy_temp_path /tmp/.journey/nginx/proxy;" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "/^http {/a client_body_temp_path /tmp/.journey/nginx/body;" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "/^http {/a fastcgi_temp_path /tmp/.journey/nginx/fastcgi;" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "/^http {/a uwsgi_temp_path /tmp/.journey/nginx/uwsgi;" /code/.fun/root/etc/nginx/nginx.conf
+RUN sed -i "/^http {/a scgi_temp_path /tmp/.journey/nginx/scgi;" /code/.fun/root/etc/nginx/nginx.conf
+
+RUN echo "\
+server {\n\
+    listen 9000;\n\
+\n\
+    root /code/www;\n\
+    index index.php index.html index.htm;\n\
+\n\
+    server_name _;\n\
+\n\
+    client_max_body_size 100M;\n\
+\n\
+    location / {\n\
+        try_files \$uri \$uri/ /index.php?\$args;\n\
+    }\n\
+\n\
+    location ~ \.php$ {\n\
+        include snippets/fastcgi-php.conf;\n\
+        fastcgi_pass unix:/tmp/.journey/php-fpm.sock;\n\
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;\n\
+    }\n\
+}\n" >> /code/.fun/root/etc/nginx/sites-enabled/default
+
+# Setup FPM
+
+RUN sed -i "s|pid = /run/php/php7.4-fpm.pid|pid = /tmp/.journey/php-fpm.pid|" /code/.fun/root/etc/php/7.4/fpm/php-fpm.conf
+RUN sed -i "s|error_log = /var/log/php7.4-fpm.log|error_log = /dev/null|" /code/.fun/root/etc/php/7.4/fpm/php-fpm.conf
+RUN sed -i "s|include=/etc/php/7.4/fpm/pool.d/\*.conf|include=/code/.fun/root/etc/php/7.4/fpm/pool.d/*.conf|" /code/.fun/root/etc/php/7.4/fpm/php-fpm.conf
+RUN sed -i "s|listen = /run/php/php7.4-fpm.sock|listen = /tmp/.journey/php-fpm.sock|" /code/.fun/root/etc/php/7.4/fpm/pool.d/www.conf
+
+# Setup PHP
+
+# Enable extensions
+
+RUN echo '\n\
+extension_dir="/code/.fun/root/usr/lib/php/20190902"\n\
+\n\
+extension=mysqlnd\n\
+extension=mysqli\n\
+extension=pdo\n\
+extension=pdo_mysql\n\
+extension=bcmath\n\
+extension=ctype\n\
+extension=json\n\
+extension=mbstring\n\
+extension=tokenizer\n\
+extension=xml\n\
+extension=exif\n\
+extension=fileinfo\n\
+extension=curl\n\
+extension=iconv\n\
+extension=gettext\n\
+extension=zip\n\
+extension=soap\n\
+extension=gd\n\
+extension=intl\n\
+extension=readline\n\
+zend_extension=opcache\n\
+\n' | tee -a /code/.fun/root/usr/lib/php/7.4/php.ini-production > /dev/null
