@@ -1,6 +1,6 @@
 # Custom PHP Runtime on Aliyun Function Compute(Serverless)
 
-A dead simple custom runtime for PHP 7.4. Before using the package you need to have an Aliyun account and install [Funcraft](https://github.com/alibaba/funcraft).
+A dead simple custom runtime for PHP 7.4 and latest Nginx. Before using the package you need to have an Aliyun account and install [Funcraft](https://github.com/alibaba/funcraft).
 
 ## Installation && Usage
 
